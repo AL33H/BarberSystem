@@ -11,79 +11,71 @@ import Model.Entities.Usuario;
 
 public class UsuarioDAO {
 
+	private static UsuarioDAO instance;
+	protected EntityManager entityManager;
+
+	public static UsuarioDAO getInstance() {
+		if (instance == null) {
+			instance = new UsuarioDAO();
+		}
+
+		return instance;
+	}
+
+	private UsuarioDAO() {
+        entityManager = getEntityManager();
+      }
+
+	private EntityManager getEntityManager() {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("exemplo-jpa");
+		if (entityManager == null) {
+			entityManager = factory.createEntityManager();
+		}
+
+		return entityManager;
+	}
+
+	public void inserir(Usuario usuario) {
+
+		entityManager.getTransaction().begin();
+		entityManager.merge(usuario);
+		entityManager.getTransaction().commit();
+
+
+	}
 
 	public Usuario Autenticar(String nome, String senha) {
-		
+
 		try {
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("exemplo-jpa");
-			EntityManager em = emf.createEntityManager();
-			
-			Usuario usuario = (Usuario) em
+
+			Usuario usuario = (Usuario) entityManager
 					.createNativeQuery("select * from usuario where nome = ? and senha = ?", Usuario.class)
 					.setParameter(1, nome).setParameter(2, senha).getSingleResult();
-			
-			em.close();
-			emf.close();
+
 			return usuario;
 		} catch (NoResultException nre) {
 			return null;
-		} 
-	}
-
-	public void Inserir(Usuario usuario) {
-
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("exemplo-jpa");
-		EntityManager em = emf.createEntityManager();
-
-		em.getTransaction().begin();
-		em.persist(usuario);
-		em.getTransaction().commit();
-
-		em.close();
-		emf.close();
-
+		}
 	}
 
 	public Usuario procurarPorId(int id) {
-
 		Usuario usuario = null;
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("exemplo-jpa");
-		EntityManager em = emf.createEntityManager();
-
-		em.getTransaction().begin();
-		usuario = em.find(Usuario.class, id);
-		em.getTransaction().commit();
-
-		em.close();
-		emf.close();
-
+		entityManager.getTransaction().begin();
+		usuario = entityManager.find(Usuario.class, id);
+		entityManager.getTransaction().commit();
 		return usuario;
-
 	}
 
 	public void Remover(int id) {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("exemplo-jpa");
-		EntityManager em = emf.createEntityManager();
-
-		em.getTransaction().begin();
-		Usuario p = em.find(Usuario.class, id);
-		em.remove(p);
-		em.getTransaction().commit();
-
-		em.close();
-		emf.close();
-
+		entityManager.getTransaction().begin();
+		Usuario p = entityManager.find(Usuario.class, id);
+		entityManager.remove(p);
+		entityManager.getTransaction().commit();
 	}
 
-	public void Atualizar(Usuario usuario) throws PSQLException {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("exemplo-jpa");
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		em.merge(usuario);
-		em.getTransaction().commit();
-
-		em.close();
-		emf.close();
-
+	public void Atualizar(Usuario usuario) {
+		entityManager.getTransaction().begin();
+		entityManager.merge(usuario);
+		entityManager.getTransaction().commit();
 	}
 }

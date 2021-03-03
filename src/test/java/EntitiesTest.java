@@ -2,12 +2,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import org.postgresql.util.PSQLException;
-
+import Model.DAO.ClienteDAO;
 import Model.DAO.UsuarioDAO;
 import Model.Entities.Agendamento;
 import Model.Entities.Cliente;
@@ -17,7 +12,7 @@ import Model.Entities.Usuario;
 
 public class EntitiesTest {
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 
 		Cliente c1 = new Cliente(null, "Aleff", "Masculino", LocalDate.of(1994, 6, 11), "88243023",
 				"Tabuleiro do Norte");
@@ -33,44 +28,35 @@ public class EntitiesTest {
 		Agendamento a4 = new Agendamento(null, c2, f2, s1, 15.00, LocalDate.now(), LocalTime.now(), 1);
 		Agendamento a5 = new Agendamento(null, c1, f1, s2, 15.00, LocalDate.now(), LocalTime.now(), 1);
 
-		Usuario u1 = new Usuario(null, "aajoao", "123", 1);
+		Usuario u1 = new Usuario(null, "Aqui", "123", 1);
+		Usuario u2 = new Usuario(null, "L", "123", 1);
 
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("exemplo-jpa");
+		UsuarioDAO.getInstance().inserir(u1);
+		UsuarioDAO.getInstance().inserir(u2);
 
-		EntityManager em = emf.createEntityManager();
+		ClienteDAO.getInstance().inserir(c1);
 
-		em.getTransaction().begin();
-		/*
-		 * em.persist(c1); em.persist(f1); em.persist(s1); em.persist(c2);
-		 * em.persist(f2); em.persist(s2);
-		 * 
-		 * 
-		 * em.persist(a1); em.persist(a2); em.persist(a3); em.persist(a4);
-		 * em.persist(a5);
-		 * 
-		 * em.persist(u1);
-		 * 
-		 * 
-		 */
-		em.getTransaction().commit();
+		ClienteDAO.getInstance().inserir(c2);
 
-		Agendamento agendamento1 = em.find(Agendamento.class, 1);
+		List<Cliente> clientes = ClienteDAO.getInstance().procurarTodos();
 
-		List agendamentos = em.createQuery("from Agendamento").getResultList();
+		for (Cliente cliente : clientes) {
+			System.out.println(cliente);
+		}
 
-		UsuarioDAO usuariodao = new UsuarioDAO();
+		Cliente cli = ClienteDAO.getInstance().procurarPorId(1);
+		cli.setNome("ALEFF MUDADO");
+		ClienteDAO.getInstance().inserir(cli);
 
-////////////////////////////////////////////////////////////////
-		
+		List<Cliente> client = ClienteDAO.getInstance().procurarTodos();
 
-		System.out.println(agendamento1.getCliente().getNome());
-		System.out.println(agendamentos.size());
-		System.out.println(usuariodao.Autenticar("pedro", "123123"));
-		System.out.println(usuariodao.Autenticar("joao", "123"));
-		System.out.println(usuariodao.Autenticar("joao", "1234"));
+		for (Cliente cliente : client) {
+			System.out.println(cliente);
+		}
 
-		em.close();
-		emf.close();
+		// System.out.println(UsuarioDAO.getInstance().Autenticar("pedro", "123123"));
+		// System.out.println(UsuarioDAO.getInstance().Autenticar("Aqui", "123"));
+		// System.out.println(UsuarioDAO.getInstance().Autenticar("Aqui", "123"));
 
 	}
 
