@@ -13,26 +13,30 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(length = 20)
-	private String usuario;
+	@Column(length = 20,unique = true, nullable = false)
+	private String nome;
 
-	@Column(length = 20)
+	@Column(length = 20, nullable = false)
 	private String senha;
 
+	@Column(length = 20, nullable = false)
 	private Integer niveldeacesso;
 
 	public Usuario() {
-		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	public Usuario(Integer id, String usuario, String senha, Integer niveldeacesso) {
+	public Usuario(Integer id, String nome, String senha, Integer niveldeacesso) {
 		super();
 		this.id = id;
-		this.usuario = usuario;
+		this.nome = nome;
 		this.senha = senha;
 		this.niveldeacesso = niveldeacesso;
 	}
 
+	
+	
+	
 	public Integer getId() {
 		return id;
 	}
@@ -41,12 +45,12 @@ public class Usuario {
 		this.id = id;
 	}
 
-	public String getUsuario() {
-		return usuario;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getSenha() {
@@ -64,5 +68,12 @@ public class Usuario {
 	public void setNiveldeacesso(Integer niveldeacesso) {
 		this.niveldeacesso = niveldeacesso;
 	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nome=" + nome + ", senha=" + senha + ", niveldeacesso=" + niveldeacesso + "]";
+	}
+	
+	
 
 }

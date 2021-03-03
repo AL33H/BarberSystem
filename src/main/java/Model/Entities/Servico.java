@@ -13,13 +13,13 @@ public class Servico {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(length = 30)
+	@Column(length = 30,nullable = false)
 	private String nome;
 	
-	@Column(length = 11)
+	@Column(length = 11,nullable = false)
 	private Double valor;
 	
-	@Column(length = 3)
+	@Column(length = 3,nullable = false)
 	private Integer porcentagemdofuncionario;
 	
 	public Servico() {

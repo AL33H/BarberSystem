@@ -15,19 +15,19 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(length = 30)
+	@Column(length = 30,nullable = false)
 	private String nome;
 	
-	@Column(length = 30)
+	@Column(length = 30,nullable = false)
 	private String sexo;
 	
-	@Column(length = 30)
+	@Column(length = 30,nullable = false)
 	private LocalDate datadenascimento;
 	
-	@Column(length = 30)
+	@Column(length = 30,nullable = false)
 	private String telefone;
 	
-	@Column(length = 30)
+	@Column(length = 30,nullable = false)
 	private String cidade;
 	
 	
