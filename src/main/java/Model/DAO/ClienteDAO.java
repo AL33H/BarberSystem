@@ -2,13 +2,11 @@ package Model.DAO;
 
 import java.util.List;
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import Model.Entities.Cliente;
-
 
 public class ClienteDAO {
 
@@ -24,8 +22,8 @@ public class ClienteDAO {
 	}
 
 	private ClienteDAO() {
-        entityManager = getEntityManager();
-      }
+		entityManager = getEntityManager();
+	}
 
 	private EntityManager getEntityManager() {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("exemplo-jpa");
@@ -36,47 +34,46 @@ public class ClienteDAO {
 		return entityManager;
 	}
 
-	public void inserir(Cliente cliente) {
-		
+	public Cliente salvar(Cliente cliente) {	
+		try {
+			entityManager.getTransaction().begin();
+			if (cliente.getId() == null) {			
+				entityManager.persist(cliente);
+			} else {
+				entityManager.merge(cliente);
+			}
 
-		entityManager.getTransaction().begin();
-		entityManager.merge(cliente);
-		entityManager.getTransaction().commit();
-
-		
-		
+			entityManager.getTransaction().commit();
+			return cliente;
+			
+		} catch (Exception e) {
+			e.getMessage();
+			return null;
+		}
 	}
+
 
 	public void remover(int id) {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("exemplo-jpa");
-		EntityManager em = emf.createEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			Cliente cliente = entityManager.find(Cliente.class, id);
+			entityManager.remove(cliente);
+			entityManager.getTransaction().commit();
+			
+		}catch(Exception e) {
+			e.getMessage();
+			entityManager.getTransaction().rollback();
+		}
+	}
+	
 
-		em.getTransaction().begin();
-		Cliente cliente = em.find(Cliente.class, id);
-		em.remove(cliente);
-		em.getTransaction().commit();
-
-
+	public Cliente procurarPorId(int id) {		
+		return entityManager.find(Cliente.class, id);
 	}
 
-	public Cliente procurarPorId(int id) {
-
-		entityManager.getTransaction().begin();
-		Cliente cliente = entityManager.find(Cliente.class, id);
-		entityManager.getTransaction().commit();
-
-
-		return cliente;
-
-	}
-
+	@SuppressWarnings("unchecked")
 	public List<Cliente> procurarTodos() {
-
-		entityManager.getTransaction().begin();
-		List<Cliente> clientes = entityManager.createNativeQuery("select * from cliente", Cliente.class).getResultList();
-		entityManager.getTransaction().commit();
-
-		return clientes;
-
+		return entityManager.createNativeQuery("select * from cliente", Cliente.class)
+				.getResultList();
 	}
 }

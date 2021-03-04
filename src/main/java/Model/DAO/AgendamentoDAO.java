@@ -8,13 +8,15 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import Model.Entities.Agendamento;
+import Model.Entities.Agendamento;
 import Model.Entities.Funcionario;
+import Model.Entities.Servico;
 
 public class AgendamentoDAO {
 
 	private static AgendamentoDAO instance;
 	protected EntityManager entityManager;
-	
+
 	public static AgendamentoDAO getInstance() {
 		if (instance == null) {
 			instance = new AgendamentoDAO();
@@ -22,10 +24,10 @@ public class AgendamentoDAO {
 
 		return instance;
 	}
-	
+
 	private AgendamentoDAO() {
-        entityManager = getEntityManager();
-      }
+		entityManager = getEntityManager();
+	}
 
 	private EntityManager getEntityManager() {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("exemplo-jpa");
@@ -35,30 +37,43 @@ public class AgendamentoDAO {
 
 		return entityManager;
 	}
-	
-	public void inserir(Agendamento agendamento) {
-		entityManager.getTransaction().begin();;
-		entityManager.merge(agendamento);
-		entityManager.getTransaction().commit();
+
+	public Agendamento salvar(Agendamento agendamento) {
+
+		try {
+			entityManager.getTransaction().begin();
+			if (agendamento.getId() == null) {
+				entityManager.persist(agendamento);
+			} else {
+				entityManager.merge(agendamento);
+			}
+
+			entityManager.getTransaction().commit();
+			return agendamento;
+
+		} catch (Exception e) {
+			e.getMessage();
+			return null;
+		}
 	}
-	
-	public void remover(Agendamento agendamento) {
-		entityManager.getTransaction().begin();
-		Agendamento agen = entityManager.find(Agendamento.class, agendamento.getId());
-		entityManager.remove(agen);
-		entityManager.getTransaction().commit();
+
+	public void remover(int id) {
+		try {
+			entityManager.getTransaction().begin();
+			Agendamento agendamento = entityManager.find(Agendamento.class, id);
+			entityManager.remove(agendamento);
+			entityManager.getTransaction().commit();
+
+		} catch (Exception e) {
+			e.getMessage();
+			entityManager.getTransaction().rollback();
+		}
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public List<Agendamento> listarPorDia(LocalDate data) {
-		
-		entityManager.getTransaction().begin();
-		List<Agendamento> agendamentos = entityManager.createNativeQuery("SELECT * FROM agendamento a where a.data = ?", Agendamento.class).setParameter(1,data).getResultList();
-		return agendamentos;
+		return entityManager.createNativeQuery("SELECT * FROM agendamento a where a.data = ?", Agendamento.class)
+				.setParameter(1, data).getResultList();
 	}
-	
-	public void listarPorFuncionario(Funcionario funcionario) {}
-	
-	
-	
-	
+
 }

@@ -1,11 +1,11 @@
 package Model.DAO;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
-
-import org.postgresql.util.PSQLException;
 
 import Model.Entities.Usuario;
 
@@ -35,14 +35,7 @@ public class UsuarioDAO {
 		return entityManager;
 	}
 
-	public void inserir(Usuario usuario) {
-
-		entityManager.getTransaction().begin();
-		entityManager.merge(usuario);
-		entityManager.getTransaction().commit();
-
-
-	}
+	
 
 	public Usuario Autenticar(String nome, String senha) {
 
@@ -58,24 +51,49 @@ public class UsuarioDAO {
 		}
 	}
 
-	public Usuario procurarPorId(int id) {
-		Usuario usuario = null;
-		entityManager.getTransaction().begin();
-		usuario = entityManager.find(Usuario.class, id);
-		entityManager.getTransaction().commit();
-		return usuario;
+	public Usuario salvar(Usuario usuario) {	
+		try {
+			entityManager.getTransaction().begin();
+			if (usuario.getId() == null) {			
+				entityManager.persist(usuario);
+			} else {
+				entityManager.merge(usuario);
+			}
+
+			entityManager.getTransaction().commit();
+			return usuario;
+			
+		} catch (Exception e) {
+			e.getMessage();
+			return null;
+		}
 	}
 
-	public void Remover(int id) {
-		entityManager.getTransaction().begin();
-		Usuario p = entityManager.find(Usuario.class, id);
-		entityManager.remove(p);
-		entityManager.getTransaction().commit();
+
+	public void remover(int id) {
+		try {
+			entityManager.getTransaction().begin();
+			Usuario usuario = entityManager.find(Usuario.class, id);
+			entityManager.remove(usuario);
+			entityManager.getTransaction().commit();
+			
+		}catch(Exception e) {
+			e.getMessage();
+			entityManager.getTransaction().rollback();
+		}
+	}
+	
+
+	public Usuario procurarPorId(int id) {		
+		return entityManager.find(Usuario.class, id);
 	}
 
-	public void Atualizar(Usuario usuario) {
-		entityManager.getTransaction().begin();
-		entityManager.merge(usuario);
-		entityManager.getTransaction().commit();
+	@SuppressWarnings("unchecked")
+	public List<Usuario> procurarTodos() {
+		return entityManager.createNativeQuery("select * from usuario", Usuario.class)
+				.getResultList();
 	}
+
+	
+
 }

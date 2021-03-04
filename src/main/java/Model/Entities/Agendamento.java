@@ -12,34 +12,34 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Agendamento {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@OneToOne
 	private Cliente cliente;
-	
+
 	@OneToOne
 	private Funcionario funcionario;
-	
+
 	@OneToOne
 	private Servico servico;
-	
+
 	@Column(length = 11)
 	private Double valor;
-	
+
 	@Column(length = 30)
 	private LocalDate data;
-	
+
 	@Column(length = 30)
 	private LocalTime hora;
-	
+
 	@Column(length = 2)
 	private Integer status;
-	
+
 	public Agendamento() {
-		
+
 	}
 
 	public Agendamento(Integer id, Cliente cliente, Funcionario funcionario, Servico servico, Double valor,
@@ -117,6 +117,12 @@ public class Agendamento {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "Agendamento [id=" + id + ", cliente=" + cliente + ", funcionario=" + funcionario + ", servico="
+				+ servico + ", valor=" + valor + ", data=" + data + ", hora=" + hora + ", status=" + status + "]";
 	}
 
 }
