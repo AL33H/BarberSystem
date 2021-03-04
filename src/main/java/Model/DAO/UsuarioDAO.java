@@ -45,6 +45,9 @@ public class UsuarioDAO {
 					.createNativeQuery("select * from usuario where nome = ? and senha = ?", Usuario.class)
 					.setParameter(1, nome).setParameter(2, senha).getSingleResult();
 
+			
+			
+			
 			return usuario;
 		} catch (NoResultException nre) {
 			return null;
