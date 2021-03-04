@@ -1,8 +1,12 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Scanner;
 
+import Model.DAO.AgendamentoDAO;
 import Model.DAO.ClienteDAO;
+import Model.DAO.FuncionarioDAO;
+import Model.DAO.ServicoDAO;
 import Model.DAO.UsuarioDAO;
 import Model.Entities.Agendamento;
 import Model.Entities.Cliente;
@@ -31,32 +35,61 @@ public class EntitiesTest {
 		Usuario u1 = new Usuario(null, "Aqui", "123", 1);
 		Usuario u2 = new Usuario(null, "L", "123", 1);
 
-		UsuarioDAO.getInstance().inserir(u1);
-		UsuarioDAO.getInstance().inserir(u2);
-
-		ClienteDAO.getInstance().inserir(c1);
-
-		ClienteDAO.getInstance().inserir(c2);
-
-		List<Cliente> clientes = ClienteDAO.getInstance().procurarTodos();
-
-		for (Cliente cliente : clientes) {
-			System.out.println(cliente);
+		Scanner ler = new Scanner(System.in);
+		int escolha = 0;
+		
+		while(escolha != 5) {
+			System.out.println("Escolha um numero");
+		escolha = ler.nextInt();
+		
+		switch(escolha) {
+		
+		case 1:
+			UsuarioDAO.getInstance().inserir(u1);
+			UsuarioDAO.getInstance().inserir(u2);
+			System.out.println("Usuario adicionado!");
+			break;
+		case 2:
+			ClienteDAO.getInstance().inserir(c1);
+			ClienteDAO.getInstance().inserir(c2);
+			System.out.println("Cliente adicionado!");
+			break;
+		case 3:
+			ServicoDAO.getInstance().inserir(s1);
+			ServicoDAO.getInstance().inserir(s2);
+			System.out.println("Servico adicionado!");
+			break;
+		case 4:
+			FuncionarioDAO.getInstance().inserir(f1);
+			FuncionarioDAO.getInstance().inserir(f2);
+			System.out.println("Funcionario adicionado!");
+			break;
+		
+		case 5:
+			
+			break;
+		
+		}
 		}
 
-		Cliente cli = ClienteDAO.getInstance().procurarPorId(1);
-		cli.setNome("ALEFF MUDADO");
-		ClienteDAO.getInstance().inserir(cli);
+		
+		
 
-		List<Cliente> client = ClienteDAO.getInstance().procurarTodos();
+		
+	
 
-		for (Cliente cliente : client) {
-			System.out.println(cliente);
-		}
+		
+		
+		
+		
+		
+		
+		//AgendamentoDAO.getInstance().inserir(a1);
+		//AgendamentoDAO.getInstance().inserir(a2);
+		
+		
 
-		// System.out.println(UsuarioDAO.getInstance().Autenticar("pedro", "123123"));
-		// System.out.println(UsuarioDAO.getInstance().Autenticar("Aqui", "123"));
-		// System.out.println(UsuarioDAO.getInstance().Autenticar("Aqui", "123"));
+		
 
 	}
 

@@ -1,6 +1,7 @@
 package Model.DAO;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -48,7 +49,13 @@ public class AgendamentoDAO {
 		entityManager.getTransaction().commit();
 	}
 	
-	public void listarPorDia(LocalDate data) {}
+	public List<Agendamento> listarPorDia(LocalDate data) {
+		
+		entityManager.getTransaction().begin();
+		List<Agendamento> agendamentos = entityManager.createNativeQuery("SELECT * FROM agendamento a where a.data = ?", Agendamento.class).setParameter(1,data).getResultList();
+		return agendamentos;
+	}
+	
 	public void listarPorFuncionario(Funcionario funcionario) {}
 	
 	
