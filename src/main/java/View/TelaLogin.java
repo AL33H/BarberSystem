@@ -16,6 +16,17 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import java.awt.FlowLayout;
+import java.awt.HeadlessException;
+
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
+import net.miginfocom.swing.MigLayout;
 
 
 public class TelaLogin extends JFrame {
@@ -23,12 +34,11 @@ public class TelaLogin extends JFrame {
 	private final TelaLoginController controller;
 
 
-	
-	
-	private JPanel contentPane;
-	private JTextField txtUsuario;
-	private JPanel panel_1;
-	private JPasswordField txtSenha;
+
+	public TelaLogin() throws HeadlessException {
+		initComponents();
+		controller = new TelaLoginController(this);
+	}
 
 	/**
 	 * Launch the application.
@@ -49,10 +59,20 @@ public class TelaLogin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TelaLogin() {
+	
+	private JPanel contentPane;
+	private JTextField txtUsuario;
+	private JPanel panel_1;
+	private JPasswordField txtSenha;
+	
+	private void initComponents() {
 
-		controller = new TelaLoginController(this);
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
+		
 		setBounds(100, 100, 300, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -60,25 +80,31 @@ public class TelaLogin extends JFrame {
 		setContentPane(contentPane);
 		
 		JPanel panel = new JPanel();
+		panel.setBorder(null);
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
 		
 		panel_1 = new JPanel();
-		panel_1.setBounds(58, 79, 158, 107);
+		panel_1.setBounds(58, 79, 149, 60);
 		panel.add(panel_1);
 		
 		JLabel lblNewLabel = new JLabel("Usuario");
-		panel_1.add(lblNewLabel);
+		lblNewLabel.setBounds(7, 10, 36, 14);
 		
 		txtUsuario = new JTextField();
-		panel_1.add(txtUsuario);
+		txtUsuario.setBounds(50, 7, 86, 20);
 		txtUsuario.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Senha");
-		panel_1.add(lblNewLabel_1);
+		lblNewLabel_1.setBounds(7, 35, 30, 14);
 		
 		txtSenha = new JPasswordField();
+		txtSenha.setBounds(50, 31, 86, 20);
 		txtSenha.setColumns(10);
+		panel_1.setLayout(null);
+		panel_1.add(lblNewLabel);
+		panel_1.add(txtUsuario);
+		panel_1.add(lblNewLabel_1);
 		panel_1.add(txtSenha);
 		
 		JButton btnLogar = new JButton("Logar");
@@ -87,8 +113,13 @@ public class TelaLogin extends JFrame {
 				controller.pegarUsuarioDaView();
 			}
 		});
-		btnLogar.setBounds(97, 208, 89, 23);
+		btnLogar.setBounds(89, 150, 89, 23);
 		panel.add(btnLogar);
+		
+		JLabel lblNewLabel_2 = new JLabel("New label");
+		lblNewLabel_2.setIcon(new ImageIcon(TelaLogin.class.getResource("/View/imagens/All natural unisex apothecary handmade in Brooklyn NY since 2012_.jpg")));
+		lblNewLabel_2.setBounds(0, 0, 288, 264);
+		panel.add(lblNewLabel_2);
 		
 		
 	}
