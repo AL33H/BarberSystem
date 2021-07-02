@@ -1,5 +1,5 @@
 # BarberSystem
-Sistema de Barbearia
+Sistema de Barbearia - ECLIPSE 
 
 Tecnologias;
 JPA - Hibarnate
